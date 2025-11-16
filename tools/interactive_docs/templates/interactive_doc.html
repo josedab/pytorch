@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} — PyTorch Interactive Documentation</title>
+
+    <!-- Pyodide for in-browser Python execution -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
+    <!-- Monaco Editor for code editing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+
+    <!-- Plotly for visualizations -->
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="../static/css/interactive-docs.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="doc-header">
+            <h1>{{ function_name }}</h1>
+            <div class="function-signature">
+                <code>{{ signature }}</code>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="doc-nav">
+            <a href="#description">Description</a>
+            <a href="#parameters">Parameters</a>
+            <a href="#examples">Examples</a>
+            <a href="#see-also">See Also</a>
+        </nav>
+
+        <!-- Description -->
+        <section id="description" class="doc-section">
+            <h2>Description</h2>
+            <div class="description-content">
+                {{ description }}
+            </div>
+        </section>
+
+        <!-- Parameters -->
+        <section id="parameters" class="doc-section">
+            <h2>Parameters</h2>
+            <dl class="parameter-list">
+                {% for param in parameters %}
+                <dt><strong>{{ param.name }}</strong> ({{ param.type }})</dt>
+                <dd>
+                    {{ param.description }}
+                    {% if param.default %}
+                    <br><em>Default: {{ param.default }}</em>
+                    {% endif %}
+                    {% if param.interactive %}
+                    <div class="param-widget" data-param="{{ param.name }}">
+                        {{ param.widget_html|safe }}
+                    </div>
+                    {% endif %}
+                </dd>
+                {% endfor %}
+            </dl>
+        </section>
+
+        <!-- Interactive Examples -->
+        <section id="examples" class="doc-section">
+            <h2>Interactive Examples</h2>
+
+            <!-- Example 1: Basic Usage -->
+            <div class="example-container">
+                <h3>Basic Usage</h3>
+                <div class="interactive-example" id="example-basic">
+                    <div class="example-controls">
+                        <button class="btn-run" onclick="runExample('example-basic')">
+                            ▶ Run
+                        </button>
+                        <button class="btn-reset" onclick="resetExample('example-basic')">
+                            ↻ Reset
+                        </button>
+                        <button class="btn-share" onclick="shareExample('example-basic')">
+                            🔗 Share
+                        </button>
+                        <span class="example-status" id="example-basic-status"></span>
+                    </div>
+
+                    <div class="code-editor-container">
+                        <div id="example-basic-editor" class="code-editor">
+import torch
+
+# Create a tensor
+x = torch.randn(5)
+print(f"Input: {x}")
+
+# Apply ReLU
+y = torch.relu(x)
+print(f"Output: {y}")
+                        </div>
+                    </div>
+
+                    <div class="output-container" id="example-basic-output">
+                        <div class="output-header">Output:</div>
+                        <div class="output-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 2: Visualization -->
+            <div class="example-container">
+                <h3>Visualization</h3>
+                <div class="interactive-example" id="example-viz">
+                    <div class="example-controls">
+                        <button class="btn-run" onclick="runExample('example-viz')">
+                            ▶ Run
+                        </button>
+                        <button class="btn-reset" onclick="resetExample('example-viz')">
+                            ↻ Reset
+                        </button>
+                        <span class="example-status" id="example-viz-status"></span>
+                    </div>
+
+                    <div class="code-editor-container">
+                        <div id="example-viz-editor" class="code-editor">
+import torch
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Create input
+x = torch.linspace(-5, 5, 100)
+y = torch.relu(x)
+
+# Create visualization
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+
+# Plot function
+ax1.plot(x.numpy(), y.numpy(), linewidth=2)
+ax1.axhline(y=0, color='k', linestyle='--', alpha=0.3)
+ax1.axvline(x=0, color='k', linestyle='--', alpha=0.3)
+ax1.set_xlabel('x')
+ax1.set_ylabel('ReLU(x)')
+ax1.set_title('ReLU Function')
+ax1.grid(True, alpha=0.3)
+
+# Plot distribution
+x_random = torch.randn(1000)
+y_random = torch.relu(x_random)
+
+ax2.hist([x_random.numpy(), y_random.numpy()],
+         bins=30, label=['Input', 'Output'], alpha=0.7)
+ax2.set_xlabel('Value')
+ax2.set_ylabel('Frequency')
+ax2.set_title('Distribution')
+ax2.legend()
+ax2.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+                        </div>
+                    </div>
+
+                    <div class="output-container" id="example-viz-output">
+                        <div class="output-header">Output:</div>
+                        <div class="output-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 3: Parameter Explorer -->
+            <div class="example-container">
+                <h3>Parameter Explorer</h3>
+                <div class="param-explorer">
+                    <div class="param-controls">
+                        <label for="size-slider">Input Size:</label>
+                        <input type="range" id="size-slider" min="10" max="1000"
+                               value="100" step="10">
+                        <span id="size-value">100</span>
+
+                        <label for="distribution-select">Distribution:</label>
+                        <select id="distribution-select">
+                            <option value="normal">Normal</option>
+                            <option value="uniform">Uniform</option>
+                            <option value="zeros">Zeros</option>
+                        </select>
+
+                        <button onclick="updateParameterExample()">Update</button>
+                    </div>
+
+                    <div class="param-output" id="param-explorer-output">
+                        <canvas id="param-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- See Also -->
+        <section id="see-also" class="doc-section">
+            <h2>See Also</h2>
+            <ul class="see-also-list">
+                <li><a href="leaky_relu.html">torch.nn.functional.leaky_relu</a> - Leaky ReLU activation</li>
+                <li><a href="elu.html">torch.nn.functional.elu</a> - ELU activation</li>
+                <li><a href="../nn/ReLU.html">torch.nn.ReLU</a> - ReLU as a module</li>
+                <li><a href="prelu.html">torch.nn.functional.prelu</a> - Parametric ReLU</li>
+            </ul>
+        </section>
+
+        <!-- Related Tutorials -->
+        <section id="tutorials" class="doc-section">
+            <h2>Related Tutorials</h2>
+            <ul class="tutorial-list">
+                <li>
+                    <a href="/tutorials/beginner/basics/buildmodel_tutorial.html">
+                        Building Neural Networks
+                    </a>
+                </li>
+                <li>
+                    <a href="/tutorials/intermediate/activation_functions.html">
+                        Understanding Activation Functions
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Footer -->
+        <footer class="doc-footer">
+            <p>
+                <a href="https://github.com/pytorch/pytorch">View on GitHub</a> |
+                <a href="/docs/stable/index.html">Documentation Home</a> |
+                <a href="https://discuss.pytorch.org">Forums</a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Interactive documentation JavaScript -->
+    <script src="../static/js/interactive-docs.js"></script>
+
+    <script>
+        // Initialize Monaco editors
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEditors();
+            initializePyodide();
+        });
+    </script>
+</body>
+</html>

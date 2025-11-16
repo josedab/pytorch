@@ -1,0 +1,485 @@
+/**
+ * Interactive Documentation CSS
+ *
+ * Styles for interactive PyTorch documentation with code examples,
+ * parameter widgets, and visualizations.
+ *
+ * Based on RFC-0004: Interactive Documentation with Live Examples
+ */
+
+/* ===== Global Styles ===== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    min-height: 100vh;
+}
+
+code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.9em;
+    background-color: #f5f5f5;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+pre code {
+    display: block;
+    padding: 12px;
+    overflow-x: auto;
+    background-color: #f8f9fa;
+    border-left: 3px solid #ee4c2c;
+}
+
+/* ===== Header ===== */
+
+.doc-header {
+    border-bottom: 3px solid #ee4c2c;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.doc-header h1 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 2.5em;
+}
+
+.function-signature {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 4px solid #ee4c2c;
+    margin-top: 15px;
+}
+
+.function-signature code {
+    background: none;
+    padding: 0;
+    font-size: 1.1em;
+}
+
+/* ===== Navigation ===== */
+
+.doc-nav {
+    display: flex;
+    gap: 20px;
+    padding: 15px 0;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e0e0e0;
+    flex-wrap: wrap;
+}
+
+.doc-nav a {
+    color: #ee4c2c;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.doc-nav a:hover {
+    color: #d43f1a;
+    text-decoration: underline;
+}
+
+/* ===== Sections ===== */
+
+.doc-section {
+    margin-bottom: 50px;
+}
+
+.doc-section h2 {
+    color: #333;
+    font-size: 2em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.doc-section h3 {
+    color: #555;
+    font-size: 1.5em;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+/* ===== Parameters ===== */
+
+.parameter-list dt {
+    font-weight: 600;
+    margin-top: 15px;
+    color: #333;
+}
+
+.parameter-list dd {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+/* ===== Interactive Examples ===== */
+
+.example-container {
+    margin-bottom: 40px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.interactive-example {
+    background-color: white;
+}
+
+.example-controls {
+    background-color: #f8f9fa;
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.example-controls button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-run {
+    background-color: #ee4c2c;
+    color: white;
+}
+
+.btn-run:hover {
+    background-color: #d43f1a;
+}
+
+.btn-reset {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-reset:hover {
+    background-color: #5a6268;
+}
+
+.btn-share {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-share:hover {
+    background-color: #218838;
+}
+
+.example-status {
+    margin-left: auto;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.example-status.ready {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.example-status.loading {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.example-status.running {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.example-status.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.example-status.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.code-editor-container {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.code-editor {
+    min-height: 200px;
+    height: auto;
+}
+
+.output-container {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+}
+
+.output-header {
+    padding: 10px 15px;
+    background-color: #e9ecef;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.output-content {
+    padding: 15px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.output-content pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.error-output {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 4px;
+    border-left: 4px solid #dc3545;
+    margin-top: 10px;
+}
+
+.plot-placeholder {
+    background-color: #e9ecef;
+    padding: 60px 20px;
+    text-align: center;
+    color: #6c757d;
+    border: 2px dashed #ced4da;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+/* ===== Parameter Widgets ===== */
+
+.param-widget {
+    margin: 15px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+}
+
+.param-explorer {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.param-controls {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 15px;
+    align-items: center;
+}
+
+.param-controls label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.param-controls input[type="range"] {
+    width: 100%;
+    margin: 0 10px;
+}
+
+.param-controls select {
+    padding: 6px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background-color: white;
+}
+
+.param-controls button {
+    padding: 8px 20px;
+    background-color: #ee4c2c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.param-controls button:hover {
+    background-color: #d43f1a;
+}
+
+.param-output {
+    padding: 20px;
+    min-height: 300px;
+}
+
+/* ===== Tensor Viewer ===== */
+
+.tensor-viewer {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.tensor-display {
+    margin: 15px 0;
+}
+
+.tensor-display canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ===== Links and Lists ===== */
+
+.see-also-list,
+.tutorial-list {
+    list-style: none;
+    padding: 0;
+}
+
+.see-also-list li,
+.tutorial-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.see-also-list li:last-child,
+.tutorial-list li:last-child {
+    border-bottom: none;
+}
+
+.see-also-list a,
+.tutorial-list a {
+    color: #ee4c2c;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.see-also-list a:hover,
+.tutorial-list a:hover {
+    text-decoration: underline;
+}
+
+/* ===== Footer ===== */
+
+.doc-footer {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 2px solid #e0e0e0;
+    text-align: center;
+    color: #6c757d;
+}
+
+.doc-footer a {
+    color: #ee4c2c;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.doc-footer a:hover {
+    text-decoration: underline;
+}
+
+/* ===== Responsive Design ===== */
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .doc-header h1 {
+        font-size: 2em;
+    }
+
+    .doc-nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .example-controls {
+        flex-wrap: wrap;
+    }
+
+    .param-controls {
+        grid-template-columns: 1fr;
+    }
+
+    .function-signature code {
+        font-size: 0.9em;
+    }
+}
+
+/* ===== Animations ===== */
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.example-status.running::after {
+    content: '...';
+    animation: pulse 1.5s infinite;
+}
+
+/* ===== Accessibility ===== */
+
+button:focus,
+input:focus,
+select:focus {
+    outline: 2px solid #ee4c2c;
+    outline-offset: 2px;
+}
+
+/* ===== Print Styles ===== */
+
+@media print {
+    .example-controls,
+    .param-controls,
+    .doc-nav {
+        display: none;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+
+    .output-container {
+        border: 1px solid #333;
+    }
+}

@@ -28,6 +28,19 @@ from .profiler import (
     tensorboard_trace_handler,
 )
 
+from .memory import (
+    EnhancedMemoryProfiler,
+    FragmentationAnalyzer,
+    MemoryLeakDetector,
+    MemoryOptimizationEngine,
+    MemoryVisualizer,
+    TensorCategory,
+    AllocationEvent,
+    FragmentationReport,
+    LeakWarning,
+    Recommendation,
+)
+
 
 __all__ = [
     "profile",
@@ -40,6 +53,17 @@ __all__ = [
     "DeviceType",
     "record_function",
     "ExecutionTraceObserver",
+    # Enhanced memory profiling
+    "EnhancedMemoryProfiler",
+    "FragmentationAnalyzer",
+    "MemoryLeakDetector",
+    "MemoryOptimizationEngine",
+    "MemoryVisualizer",
+    "TensorCategory",
+    "AllocationEvent",
+    "FragmentationReport",
+    "LeakWarning",
+    "Recommendation",
 ]
 
 from . import itt
